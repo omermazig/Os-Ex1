@@ -13,10 +13,10 @@ static int TRIE_LEVELS = 5;
 //    12 First bits are not relevant (valid bit + 11 unused bits)
 static int PHYS_ADDR_IRRELEVANT_BITS = 12;
 
-void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn){
-    pt <<= PHYS_ADDR_IRRELEVANT_BITS;
-    uint64_t* va = phys_to_virt(pt);
+void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn) {
     uint64_t level_symbol;
+    pt <<= PHYS_ADDR_IRRELEVANT_BITS;
+    uint64_t *va = phys_to_virt(pt);
 
 
     for (int level_i = 1; level_i < TRIE_LEVELS; ++level_i) {
@@ -24,7 +24,7 @@ void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn){
         level_symbol = vpn >> offset;
 //        Check valid bit of node, to see if we need to create new node.
         if (!(va[level_symbol] & 1)) {
-            if(ppn == NO_MAPPING)
+            if (ppn == NO_MAPPING)
 //                That means that it's OK there's no node, since there is no mapping.
                 return;
             else {
@@ -42,13 +42,13 @@ void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn){
 //    After the final loop, vpn is the final symbol
     level_symbol = vpn;
 //    Finally, add the given ppn with padding and 1 as the valid bit - As long as it's not a NO_MAPPING
-    va[level_symbol] = (ppn == NO_MAPPING) ? 0:(ppn << PHYS_ADDR_IRRELEVANT_BITS) + 1;
+    va[level_symbol] = (ppn == NO_MAPPING) ? 0 : (ppn << PHYS_ADDR_IRRELEVANT_BITS) + 1;
 }
 
-uint64_t page_table_query(uint64_t pt, uint64_t vpn){
-    pt <<= PHYS_ADDR_IRRELEVANT_BITS;
-    uint64_t* va = phys_to_virt(pt);
+uint64_t page_table_query(uint64_t pt, uint64_t vpn) {
     uint64_t level_symbol;
+    pt <<= PHYS_ADDR_IRRELEVANT_BITS;
+    uint64_t *va = phys_to_virt(pt);
 
 
     for (int level_i = 1; level_i < TRIE_LEVELS; ++level_i) {
