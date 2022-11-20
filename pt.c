@@ -67,6 +67,6 @@ uint64_t page_table_query(uint64_t pt, uint64_t vpn){
     //    After the final loop, vpn is the final symbol
     level_symbol = vpn;
 
-    return va[level_symbol] >> 12;
+    return !(va[level_symbol] & 1) ? NO_MAPPING : va[level_symbol] >> 12;
 
 }
